@@ -1,0 +1,39 @@
+{
+  "projects": [
+    {
+      "name": "Customer Portal Redesign",
+      "owner": "Maya Chen",
+      "status": "On Track",
+      "recentActivity": "Completed usability testing and approved sprint 12 scope.",
+      "priority": "High"
+    },
+    {
+      "name": "Mobile Checkout Reliability",
+      "owner": "Daniel Ortiz",
+      "status": "At Risk",
+      "recentActivity": "Payment provider timeout issue reproduced in staging; fix in progress.",
+      "priority": "High"
+    },
+    {
+      "name": "Data Warehouse Cost Optimization",
+      "owner": "Priya Nair",
+      "status": "Monitor",
+      "recentActivity": "Nightly ETL runtime reduced by 18 percent after partition tuning.",
+      "priority": "Medium"
+    },
+    {
+      "name": "Incident Response Playbook",
+      "owner": "Ethan Brooks",
+      "status": "Healthy",
+      "recentActivity": "Final tabletop exercise completed and runbook published to ops wiki.",
+      "priority": "Low"
+    },
+    {
+      "name": "AI Support Assistant Pilot",
+      "owner": "Lina Park",
+      "status": "Review",
+      "recentActivity": "Pilot transcript analysis shared; legal review scheduled for Friday.",
+      "priority": "Medium"
+    }
+  ]
+}

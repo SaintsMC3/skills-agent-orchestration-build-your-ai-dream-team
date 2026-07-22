@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project Pulse</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="page" aria-labelledby="page-title">
+    <header class="page-header">
+      <h1 id="page-title" class="page-title">Project Pulse</h1>
+      <p class="page-subtitle">Live status view of active initiatives and recent delivery signals.</p>
+    </header>
+
+    <section aria-labelledby="projects-heading">
+      <h2 id="projects-heading" class="visually-hidden">Project Dashboard</h2>
+      <div id="project-list" class="dashboard" role="list" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      var projectList = document.getElementById("project-list");
+
+      function toToken(value) {
+        return String(value || "")
+          .trim()
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, "-")
+          .replace(/^-+|-+$/g, "");
+      }
+
+      function createProjectCard(project) {
+        var card = document.createElement("article");
+        card.className = "project-card";
+        card.setAttribute("role", "listitem");
+
+        var statusToken = toToken(project.status);
+        var priorityToken = toToken(project.priority);
+
+        card.innerHTML = ""
+          + "<div class=\"card-header\">"
+          + "  <div>"
+          + "    <h3 class=\"project-name\"></h3>"
+          + "    <p class=\"project-owner\"></p>"
+          + "  </div>"
+          + "  <div class=\"card-chips\">"
+          + "    <span class=\"chip status\"></span>"
+          + "    <span class=\"chip priority\"></span>"
+          + "  </div>"
+          + "</div>"
+          + "<dl class=\"meta\">"
+          + "  <div class=\"meta-row\">"
+          + "    <dt class=\"meta-label\">Status</dt>"
+          + "    <dd class=\"meta-value\"></dd>"
+          + "  </div>"
+          + "  <div class=\"meta-row\">"
+          + "    <dt class=\"meta-label\">Priority</dt>"
+          + "    <dd class=\"meta-value\"></dd>"
+          + "  </div>"
+          + "  <div class=\"meta-row\">"
+          + "    <dt class=\"meta-label\">Recent Activity</dt>"
+          + "    <dd class=\"meta-value recent-activity\"></dd>"
+          + "  </div>"
+          + "</dl>";
+
+        card.querySelector(".project-name").textContent = project.name;
+        card.querySelector(".project-owner").textContent = "Owner: " + project.owner;
+
+        var statusChip = card.querySelector(".status");
+        statusChip.textContent = project.status;
+        statusChip.classList.add(statusToken);
+
+        var priorityChip = card.querySelector(".priority");
+        priorityChip.textContent = project.priority;
+        priorityChip.classList.add(priorityToken);
+
+        var metaValues = card.querySelectorAll(".meta-value");
+        metaValues[0].textContent = project.status;
+        metaValues[1].textContent = project.priority;
+        metaValues[2].textContent = project.recentActivity;
+
+        return card;
+      }
+
+      function renderProjects(projects) {
+        projectList.textContent = "";
+        projects.forEach(function (project) {
+          projectList.appendChild(createProjectCard(project));
+        });
+      }
+
+      fetch("project-data.json")
+        .then(function (response) {
+          if (!response.ok) {
+            throw new Error("Unable to load project data.");
+          }
+          return response.json();
+        })
+        .then(function (data) {
+          var projects = Array.isArray(data.projects) ? data.projects : [];
+          renderProjects(projects);
+        })
+        .catch(function () {
+          projectList.innerHTML = "<p role=\"status\">Project data is currently unavailable.</p>";
+        });
+    })();
+  </script>
+</body>
+</html>
